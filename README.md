@@ -151,21 +151,49 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
             Selecting a One frame per 1-second duration for video processing is recommended due to its consistent high
             training and validation accuracy across different models (ResNetV2, InceptionResNetV2, MobileNetV2, VGG-16).This duration strikes a balance between capturing essential temporal information, ensuring better generalization, and
             reducing computational load for improved efficiency in training and inference.
-   
+              ```python
+               <function keras.src.applications.mobilenet_v2.MobileNetV2(input_shape=None, alpha=1.0, include_top=True, weights='imagenet', input_tensor=None, pooling=None, classes=1000, classifier_activation='softmax', **kwargs)>
+              ```
+
    8. **Cross-Validation**
       - Model selection based on Model Comparison results: MobileNetV2 was selected for cross-validation.
       - 5-fold split maintaining class distribution.
-      - For each fold, the model is trained on a subset of the data and evaluated on the validation set and calculate accuracy and F1 score for each fold.
-   
+      - For each fold, the model is trained on a subset of the data and evaluated on the validation set and calculate accuracy, F1 score and trained models and training history for each fold
+         <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/71ca8398-2e60-416e-bb96-c262c651dfdc">
+          </p>
+
    9. **Soft Voting**
-      - Predict probabilities for top 3 models.
+      - Predict probabilities for top 3 models:ResNet50, InceptionResNetV2 and MobileNetV2 models.
       - Apply threshold of 0.5 for binary predictions.
-   
-   10. **Hyperparameters Tuning**
-      - Experiment with learning rates, batch sizes, and epochs for the champion model.
-   
-   11. **Overall Comparison and The Superior Model**
+         <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/118e6329-9c95-43bf-890d-84a72bd2c17b">
+          </p>
+
+   10. **Hyperparameters Tuning**: on Chapion Model MobileNetV2 Model 
+       - Different Learning Rates: with batch size 32 and early stop after 5 epochs.
+            <p align="center">
+               <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/6f26dde0-8600-4034-80df-bb53b1099c2b">
+            </p>  
+
+       - Different Batch Sizes: with Learning Rate 10^(-4) and early stop after 5 epochs.
+             <p align="center">
+               <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/627c17d6-5eb4-4842-b658-bfcf88899c2f">
+            </p>    
+
+       - Different number of epochs in early stop: with Learning Rate 10^(-4) and batch size =32.
+          <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/8f6a282f-a432-4fdb-82df-e07eb6689509">
+         </p>    
+
+   12. **Overall Comparison and The Superior Model**
       - Save the superior model for further development.
+          <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/1975e945-0101-4390-9c6f-989b7d21225e">
+         </p> 
+          <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/f10e410c-96b9-4478-b7d3-dbbedf4f4602">
+         </p> 
    
-   12. **Deployment Phase**
+   14. **Deployment Phase**
       - Implement deployment using Flask.
