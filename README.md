@@ -57,12 +57,12 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
    3. **Video Processing**
       - Extract frames at 1 Frame per 1s, 2s, 4s intervals.
         + 1 Frame per 1s
-         ```python
+          ```python
             Capture one frame every 1 seconds
             Total number of videos: 1999
             Total number of frames: 16370
             Average frames per video: 8.189094547273637
-        ```
+          ```
          + 1 Frame per 2s
            ```python
                Capture one frame every 2 seconds
@@ -76,7 +76,7 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
                Total number of videos: 1999
                Total number of frames: 3258
                Average frames per video: 1.629814907453727
-          ```
+            ```
       - Resize frames to 128x128 pixels.
       - Store metadata: `Video ID`, `Frame ID`, `Video Label`.
       - Face detection using `cvlib`, resizing images to 300x300, and drawing rectangles around faces.
@@ -90,11 +90,40 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
       - Convert `Normalized Frame` data and `Labels` columns to TensorFlow tensors.
 
    6. **Model Creation and Training**
-      - ResNet50, InceptionResNetV2, MobileNetV2, VGG16 models.
-      - Transfer learning with specific architectures.
+      - ResNet50, InceptionResNetV2, MobileNetV2, VGG16 models pre-trained on ImageNet.
+      - Transfer learning with specific architectures(custom Layers)
+        ```python
+          x = GlobalAveragePooling2D()(resnet_model.output)
+          x = Dense(512, activation='relu')(x)
+          x = Dropout(0.5)(x) 
+          x = Dense(2, activation='softmax')(x)
+        ```
+      - Model compilation:
+        + ResNet50 Model
+           ```python
+             custom_optimizer = Adam(learning_rate=0.0001)   
+             model.compile(optimizer=custom_optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+           ```
+        + InceptionResNetV2 Model
+           ```python
+             lr_schedule = ExponentialDecay(initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True)
+             optimizer = Adam(learning_rate=lr_schedule)
+             model.compile(optimizer=custom_optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+           ```
+        + MobileNetV2 Model
+          ```python
+             sgd = SGD(lr=0.0001)  # Stochastic Gradient Descent optimizer with a specific learning rate
+             vgg_model_transfer.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])  # Compile the model
 
-      - Model compilation: Adam optimizer, learning rate, categorical cross-entropy loss.
+          ```
       - Training details: epochs, batch size, early stopping.
+        ```python
+           epochs=100
+           batch_size=32
+           learning rate= 10^-4
+           early_stopping = EarlyStopping(monitor='val_loss', patience=7, restore_best_weights=True)
+        ```
+
    
    7. **Evaluation and Result Analysis**
       - Confusion matrix for video label determination.
