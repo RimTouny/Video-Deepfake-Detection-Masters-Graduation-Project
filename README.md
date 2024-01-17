@@ -116,21 +116,46 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
         ```python
            epochs=100
            batch_size=32
-           learning rate= 10^-4
+           learning rate= 0.00001
            early_stopping = EarlyStopping(monitor='val_loss', patience=7, restore_best_weights=True)
         ```
 
    
    7. **Evaluation and Result Analysis**
-      - Confusion matrix for video label determination.
-      - F1 score and accuracy calculation.
-      - Learning and loss curve analysis.
+      - Confusion matrix for video label determination: Calculated based on a specific threshold for determining the video label (REAL or FAKE) from the predicted frames.
+          <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/3da2ced4-736e-4ed0-a223-6e7b42579026">
+          </p>
+         
+         + Prediction Threshold:
+            - The evaluation process primarily relies on counting the occurrence of the Real Label among the predicted frames for each video.
+            - If over 70% of the frames are predicted as REAL, the video is categorized as REAL; otherwise, it is classified as FAKE.
+
+         + Categorization of Videos:
+            - For each video, the model predicts a label based on the majority class of the frames. If more than 70% of the frames are predicted as REAL, the video is categorized as REAL; otherwise, it is categorized as FAKE.
+
+         + Comparison with Actual Labels:
+            - Subsequently, the predicted label obtained from the majority prediction of frames for each video is compared with the actual video label.
+       <p align="center">
+         <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/0ae81b1d-a233-4379-8519-f8e4825595e3">
+       </p>
+           Here is an example illustrating our evaluation process on the ResNetV2 model using the Test Set in one frame per 1 sec. The green column (Actual Label) contains the known actual labels of each video, while the red column (Model Decision) is derived from the two blue columns (Predicted Fake Count, Predicted Real Count).
+
+      - F1 score calculation based on video-level predictions and labels.
+      - Learning and loss curve analysis  based on video-level predictions and labels.
       - Model comparison to identify champion model.
+           <p align="center">
+            <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/951619d5-30fc-4835-8c14-87633d0aa90b">
+          </p>
+         + 1-Second Superiority
+            Selecting a One frame per 1-second duration for video processing is recommended due to its consistent high
+            training and validation accuracy across different models (ResNetV2, InceptionResNetV2, MobileNetV2, VGG-16).This duration strikes a balance between capturing essential temporal information, ensuring better generalization, and
+            reducing computational load for improved efficiency in training and inference.
    
    8. **Cross-Validation**
-      - Model selection based on Model Comparison results.
+      - Model selection based on Model Comparison results: MobileNetV2 was selected for cross-validation.
       - 5-fold split maintaining class distribution.
-      - Calculate accuracy and F1 score for each fold.
+      - For each fold, the model is trained on a subset of the data and evaluated on the validation set and calculate accuracy and F1 score for each fold.
    
    9. **Soft Voting**
       - Predict probabilities for top 3 models.
