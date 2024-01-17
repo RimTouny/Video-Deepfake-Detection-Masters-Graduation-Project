@@ -14,17 +14,15 @@ Undertook a comprehensive exploration of fake and real video datasets, employing
    + Kears: Version 2.15.0
    + scikit-learn: Version: 1.3.0	
 
-## **Binary classification **
+### **Binary classification**
 Detect and classify Deepfake videos: Real or Fake.
 
-
-## **Design Overview**
+### **Design Overview**
 The deepfake detection system utilizes a multi-stage approach involving data preprocessing, feature extraction, deep learning-based classification, and a user-friendly web interface. It employs state-of-the-art algorithms to distinguish between authentic and manipulated videos, addressing the challenge of deepfake proliferation.
  <p align="center">
    <img src="https://github.com/RimTouny/Video-Deepfake-Detection-Masters-Graduation-Project/assets/48333870/c1a6a0f7-4e95-4e55-bc09-3b43d6e4426b">
  </p>
  
-
 ### Dataset Description:
  - **Dataset Overview:**
    - Compilation of 2000 videos.
