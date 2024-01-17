@@ -6,10 +6,16 @@ Undertook a comprehensive exploration of fake and real video datasets, employing
 - Execute cells in a Jupyter Notebook environment.
 - Processing power needed (GPU).
 - Libraries:
-   + OpenCV: Version installed: 4.8.1.78        + NumPy: Version 1.24.3
-   + cvlib	                                    + Matplotlib: Version 3.7.2
-   + TensorFlow: Version: 2.15.0                + Kears: Version 2.15.0
+   + OpenCV: Version installed: 4.8.1.78
+   + NumPy: Version 1.24.3
+   + cvlib
+   + Matplotlib: Version 3.7.2
+   + TensorFlow: Version: 2.15.0
+   + Kears: Version 2.15.0
    + scikit-learn: Version: 1.3.0	
+
+## **Binary classification **
+Detect and classify Deepfake videos: Real or Fake.
 
 
 ## **Design Overview**
@@ -39,4 +45,77 @@ The deepfake detection system utilizes a multi-stage approach involving data pre
  
 `Image` 
 ## **Key Tasks Undertaken**    
-  1. **Data Loading:**
+   1. **Data Collection**
+      - Mixture of sponsor-contributed data data and ROOP Face Swap technique-generated data.
+     
+   2. **Data Exploration**
+      - Assess real and fake video counts.
+        ```python
+            Number of Fake Videos: 1000
+            Number of Real Videos: 1000
+         ```
+   3. **Video Processing**
+      - Extract frames at 1 Frame per 1s, 2s, 4s intervals.
+        + 1 Frame per 1s
+         ```python
+            Capture one frame every 1 seconds
+            Total number of videos: 1999
+            Total number of frames: 16370
+            Average frames per video: 8.189094547273637
+        ```
+         + 1 Frame per 2s
+           ```python
+               Capture one frame every 2 seconds
+               Total number of videos: 1999
+               Total number of frames: 7965
+               Average frames per video: 3.9844922461230614
+           ```
+         + 1 Frame per 4s
+           ```python
+               Capture one frame every 4 seconds
+               Total number of videos: 1999
+               Total number of frames: 3258
+               Average frames per video: 1.629814907453727
+          ```
+      - Resize frames to 128x128 pixels.
+      - Store metadata: `Video ID`, `Frame ID`, `Video Label`.
+      - Face detection using `cvlib`, resizing images to 300x300, and drawing rectangles around faces.
+   
+   4. **Data Preprocessing**
+      - Normalize pixel values to [0, 1].
+      - Label encoding for fake/real using `LabelEncoder`.
+      - Split data into 80% training, 10% validation, 10% testing (1 Frame per 1s, 2s, 4s intervals).
+   
+   5. **Data Preparation**
+      - Convert `Normalized Frame` data and `Labels` columns to TensorFlow tensors.
+
+   6. **Model Creation and Training**
+      - ResNet50, InceptionResNetV2, MobileNetV2, VGG16 models.
+      - Transfer learning with specific architectures.
+
+      - Model compilation: Adam optimizer, learning rate, categorical cross-entropy loss.
+      - Training details: epochs, batch size, early stopping.
+   
+   7. **Evaluation and Result Analysis**
+      - Confusion matrix for video label determination.
+      - F1 score and accuracy calculation.
+      - Learning and loss curve analysis.
+      - Model comparison to identify champion model.
+   
+   8. **Cross-Validation**
+      - Model selection based on Model Comparison results.
+      - 5-fold split maintaining class distribution.
+      - Calculate accuracy and F1 score for each fold.
+   
+   9. **Soft Voting**
+      - Predict probabilities for top 3 models.
+      - Apply threshold of 0.5 for binary predictions.
+   
+   10. **Hyperparameters Tuning**
+      - Experiment with learning rates, batch sizes, and epochs for the champion model.
+   
+   11. **Overall Comparison and The Superior Model**
+      - Save the superior model for further development.
+   
+   12. **Deployment Phase**
+      - Implement deployment using Flask.
